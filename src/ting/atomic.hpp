@@ -59,6 +59,47 @@ class S32;
 
 
 /**
+* @brief Set full memory barrier.
+* Full memory barrier means that all load/store memory access
+* which goes before the barrier will be executed before all load/store access which goes after the barrier.
+* Because of possible unordered execution on some fancy CPUs it is necessary to
+* use memory barriers.
+* Note, that this barrier function should only be used right before or right after
+* one of the atomic operations provided by the 'atomic' namespace.
+* If used in other places, it is not guaranteed that the barrier will actually be set
+* and the behavior will be CPU-architecture dependent. This is because some CPUs does not
+* provide explicit operation for setting the memory barrier but, instead, they guarantee
+* that atomic operations they provide are setting implicit memory barriers.
+*/
+inline void MemoryBarrier()throw(){
+	TRACE(<< "atomic::MemoryBarrier(): DEPRECATED!" << std::endl)
+#if defined(M_ATOMIC_USE_MUTEX_FALLBACK)
+	//do nothing
+
+#elif M_CPU == M_CPU_X86 || M_CPU == M_CPU_X86_64
+	//do nothing, because locked operations on x86 make memory barrier
+
+#elif M_CPU == M_CPU_ARM && M_CPU_VERSION >= 7 && M_CPU_ARM_THUMB != 1 //DMB instruction is available only on ARMv7
+	__asm__ __volatile__(
+			"dmb" : : :"memory" //modifies "memory" is for compiler barrier to avoid instruction reordering by compiler
+		);
+
+#elif M_CPU == M_CPU_ARM && M_CPU_ARM_THUMB != 1 //for older ARMs use CP15 data memory barrier operation
+	__asm__ __volatile__(
+			"mcr p15, 0, %0, c7, c10, 5" : :"r"(1) :"memory" //modifies "memory" is for compiler barrier to avoid instruction reordering by compiler
+		);
+
+#elif M_CPU == M_CPU_ARM && M_CPU_ARM_THUMB == 1
+	#error "ARM Thumb-1 mode does not support atomic operations"
+
+#else
+	#error "ASSERT(false)"
+#endif
+}
+
+
+
+/**
  * @brief Atomic flag.
  * Atomic flag is a bool-like value whose set and clear operations are atomic.
  */
