@@ -1,0 +1,19 @@
+nuget{
+    nuspec{
+		id = libting;
+        version : 4.0.0.0;
+        title: C++ utility library;
+        authors: {Ivan Gagis};
+        owners: {Ivan Gagis};
+        licenseUrl: "http://opensource.org/licenses/MIT";
+        projectUrl: "https://github.com/igagis/ting";
+        iconUrl: "";
+        requireLicenseAcceptance:false;
+        summary:C++ utility library;
+
+        description: @"This is a C++ utility library";
+        releaseNotes: "Blah blah";
+        copyright: Copyright 2015 Ivan Gagis;
+        tags: { native};
+    }
+}
