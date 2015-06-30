@@ -832,7 +832,7 @@ private:
 								this->CallCallback(removedResolver.operator->(), HostNameResolver::ERROR, 0);
 							}
 						}
-					}catch(ting::net::Exc& e){
+					}catch(ting::net::Exc& DEBUG_CODE(e)){
 						TRACE(<< "writing to a socket failed: " << e.What() << std::endl)
 						this->isExiting = true;
 						this->RemoveAllResolvers();
