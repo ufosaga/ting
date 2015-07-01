@@ -62,9 +62,9 @@ void* Thread::RunThread(void *data)
 	Thread *thr = reinterpret_cast<Thread*>(data);
 	try{
 		thr->Run();
-	}catch(ting::Exc& e){
+	}catch(ting::Exc& DEBUG_CODE(e)){
 		ASSERT_INFO(false, "uncaught ting::Exc exception in Thread::Run(): " << e.What())
-	}catch(std::exception& e){
+	}catch(std::exception& DEBUG_CODE(e)){
 		ASSERT_INFO(false, "uncaught std::exception exception in Thread::Run(): " << e.what())
 	}catch(...){
 		ASSERT_INFO(false, "uncaught unknown exception in Thread::Run()")
